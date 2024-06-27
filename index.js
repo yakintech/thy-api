@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors');
 var jwt = require('jsonwebtoken');
 const { productsData } = require('./data/productsData');
+const { suppliers } = require('./data/suppliersData');
 
 const jwtKey = 'my_secret_key'
 
@@ -60,8 +61,23 @@ app.post("/token", (req, res) => {
 })
 
 
+app.get("/api/suppliers", (req, res) => {
+    res.json(suppliers);
+})
+
 app.get("/api/products", (req, res) => {
     res.json(productsData);
+})
+
+app.get("/api/products/:id", (req, res) => {
+    const id = req.params.id;
+    const product = productsData.find(p => p.id == id);
+    if (product) {
+        res.json(product);
+    }
+    else {
+        res.status(404).send("Product not found");
+    }
 })
 
 
